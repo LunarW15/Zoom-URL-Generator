@@ -1,5 +1,5 @@
 # Zoom-Automation
-Zoom URL 생성기: https://moondream15.github.io/Zoom-URL-Generator
+Zoom URL 생성기: https://moondream15.github.io/Zoom-URL-Generator/
 
 ## 설명
 * PC (데스크톱)용 Zoom URL
