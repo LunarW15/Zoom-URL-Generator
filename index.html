@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Zoom URL 생성기</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <script>
+            (function() {
+                const vars = {}
+                const parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+                    vars[key] = value
+                })
+                if (vars.jump) {
+                    const device = localStorage.getItem("device")
+                    if (!device) localStorage.setItem("device", confirm("모바일 Zoom을 사용합니까?"))
+                    const prefix = localStorage.getItem("device") == "true" ? "zoomus" : "zoommtg"
+                    const result = `${prefix}://zoom.us/join?confno=${encodeURIComponent(decodeURIComponent(vars.confno))}&pwd=${encodeURIComponent(decodeURIComponent(vars.pwd))}&uname=${encodeURIComponent(decodeURIComponent(vars.uname))}`
+                    console.log(result)
+                    var idl = document.createElement("idl")
+                    var pwl = document.createElement("pwl")
+                    var nl = document.createElement("nl")
+                    var ml = document.createElement("ml")
+                    var a = document.createElement("a")
+                    idl.innerText = `회의 ID: ${vars.confno}\n`
+                    pwl.innerText = `암호:${decodeURIComponent(vars.pwd)}\n`
+                    nl.innerText = `이름: ${decodeURIComponent(vars.uname)}\n`
+                    ml.innerText = `리다이렉트 모드: ${device ? 'Mobile' : 'PC'}\n`
+                    a.innerText = "연결 반응이 없나요? 이 링크로 돌아가서 로컬 스토리지 초기화를 해보세요"
+                    a.setAttribute("href", "https://moondream15.github.io/Zoom-URL-Generator")
+                    document.write(idl.outerHTML)
+                    document.write(pwl.outerHTML)
+                    document.write(nl.outerHTML)
+                    document.write(ml.outerHTML)
+                    document.write(a.outerHTML)
+                    window.location.replace(result)
+                }
+            })()
+        </script>
+        <link href="https://cdn.bootcss.com/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+        <!-- <link rel="stylesheet" href="./bootstrap.min.css"> -->
+    </head>
+    <body>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <h1>Zoom URL 생성기</h1>
+                    <div class="form-group">
+                        <label for="meeting-id">회의 ID</label>
+                        <input class="form-control" id="meeting-id" placeholder="회의 ID">
+                        <small class="form-text text-muted">"123-456-7890", "123 456 7890", "1234567890" 형식으로 입력해도 됩니다.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="meeting-password">암호</label>
+                        <input class="form-control" id="meeting-password" placeholder="회의 암호">
+                    </div>
+                    <div class="form-group">
+                        <label for="meeting-name">이름</label>
+                        <input class="form-control" id="meeting-name" placeholder="회의에 참가할 이름">
+                    </div>
+                    <button class="btn btn-primary btn-lg btn-block" id="btn-generate">생성</button>
+                    
+					
+					<div class="my-3">PC (데스크톱)</div>
+					<div class="input-group mb-3">
+					  <input type="text" class="form-control" id="meeting-url">
+					  <div class="input-group-append"><button class="btn btn-outline-secondary" type="button" id="btn-copypc">복사</button></div>
+					</div>
+                    <div class="my-3">Mobile (모바일)</div>
+					<div class="input-group mb-3">
+					  <input type="text" class="form-control" id="meeting-url-mobile">
+					  <div class="input-group-append"><button class="btn btn-outline-secondary" type="button" id="btn-copymob">복사</button></div>
+					</div>
+                    <div class="my-3">URL 리다이렉트</div>
+					<div class="input-group mb-3">
+					  <input type="text" class="form-control" id="meeting-url-redirect">
+					  <div class="input-group-append"><button class="btn btn-outline-secondary" type="button" id="btn-copyred">복사</button></div>
+					</div>
+                    <small class="form-text text-muted">이 URL을 Notes 앱, 캘린더 앱 또는 Word 문서에 저장할 수 있습니다. 링크를 클릭하면 회의에 참가하게 됩니다.</small>
+                    <small class="form-text text-muted">URL 리다이렉트는 기기에 따라 Zoom Mobile URL 또는 Zoom PC URL로 연결됩니다. URL 리다이렉트를 사용하면 처음 방문할 때 장치 유형을 선택해야 합니다. 이 설정은 '(로컬 스토리지 초기화)' 버튼으로 재설정이 가능합니다."</small>
+                    <div class="my-3">PC (데스크톱) <a id="meeting-url-a"></a></div>
+                    <div class="my-3">Mobile (모바일) <a id="meeting-url-a-mobile"></a></div>
+                    <div class="my-3">URL 리다이렉트 <a id="meeting-url-a-redirect"></a></div>
+
+                    <button class="btn btn-danger" id="btn-clear">로컬 스토리지 초기화</button>
+                    <small class="form-text text-info" id="text-info"></small>
+                    <small class="form-text text-muted">Zoom URL 생성기에서 생성된 URL 리다이렉트 링크가 잘못된 메시지를 표시한다면 이 버튼을 클릭해 기기 정보를 지워주세요.</small>
+
+                    <h1 class="mt-3">알려진 문제</h1>
+                    <p class="mb-3">Firefox는 인코딩 된 URL을 Zoom에 연결하지 못할 수 있습니다. URL을 열려면 다른 브라우저를 사용하세요.</p>
+                    
+                </div>
+            </div>
+        </div>
+        <!-- <script src="./jquery-3.4.1.min.js"></script> -->
+        <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+        <!-- <script src="https://cdn.bootcss.com/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script> -->
+        <script>
+            const BASE = "https://moondream15.github.io/Zoom-URL-Generator"
+            // const BASE = ""
+            $(document).ready(() => {
+                $("#meeting-id").val("")
+                $("#meeting-password").val("")
+                $("#meeting-name").val("")
+                $("#btn-clear").click(() => {
+                    localStorage.clear()
+                    $("#text-info").text("초기화 했습니다!")
+                })
+                $("#btn-generate").click(() => {
+                    const id = $("#meeting-id").val().replace(/\D/g,'')
+                    const pwd = $("#meeting-password").val()
+                    const name = $("#meeting-name").val()
+                    const result = `zoommtg://zoom.us/join?confno=${id}&pwd=${pwd}&uname=${encodeURIComponent(name)}`
+                    $("#meeting-url").val(result)
+                    $("#meeting-url-a").attr("href", result)
+                    $("#meeting-url-a").text(result)
+                    const result_mobile = `zoomus://zoom.us/join?confno=${id}&pwd=${pwd}&uname=${encodeURIComponent(name)}`
+                    $("#meeting-url-mobile").val(result_mobile)
+                    $("#meeting-url-a-mobile").attr("href", result_mobile)
+                    $("#meeting-url-a-mobile").text(result_mobile)
+                    const redirect_url = `${BASE}/?jump=true&confno=${id}&pwd=${pwd}&uname=${encodeURIComponent(name)}`
+                    $("#meeting-url-redirect").val(redirect_url)
+                    $("#meeting-url-a-redirect").attr("href", redirect_url)
+                    $("#meeting-url-a-redirect").text(redirect_url)              
+                })
+				$("#btn-copypc").click(() => {
+                    var copyText = document.getElementById("meeting-url");
+					copyText.select();
+					document.execCommand("Copy");
+					alert("복사되었습니다");
+                })
+				$("#btn-copymob").click(() => {
+                    var copyText = document.getElementById("meeting-url-mobile");
+					copyText.select();
+					document.execCommand("Copy");
+					alert("복사되었습니다");
+                })
+				$("#btn-copyred").click(() => {
+                    var copyText = document.getElementById("meeting-url-redirect");
+					copyText.select();
+					document.execCommand("Copy");
+					alert("복사되었습니다");
+                })
+            })
+        </script>
+    </body>
+</html>
